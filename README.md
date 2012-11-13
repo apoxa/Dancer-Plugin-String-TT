@@ -1,4 +1,5 @@
 Dancer-Plugin-String-TT
 =======================
 
-Plugin for using String::TT in Dancer
+This Dancer plugin provides a way to easily use String::TT in your Dancer app
+or in a Template file.
