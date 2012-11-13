@@ -1,14 +1,18 @@
-package Dancer::Plugin::String::TT;
+package Dancer::Plugin::String::TT; # You have to 'use' this in your App.pm
 
 use strict;
 use warnings;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
-use Dancer ':syntax';
+use Dancer ':syntax';  # This provides Dancer keywords like 'register'
 use Dancer::Plugin;
 
 use String::TT;
 
+# The module adds a hook, which is called, just before the template is
+# rendered. It then provides the 'tt'-keyword to the stash, so you can use
+# this keyword in your templates like this:
+# [% tt('[% foo %]') %]
 add_hook(
     before_template => sub {
         my $tokens = shift;
@@ -16,20 +20,32 @@ add_hook(
     },
 );
 
+# The module also registers the 'tt'-keyword to Dancer. After that, you can
+# use it in your Dancer-app like this:
+# my $rendered = tt('[% foo %]');
 register tt => sub {
     _tt(@_);
 };
 
+# This is a wrapper-function, which calls the functions from another module
 sub _tt {
     my ($str) = @_;
     return String::TT::strip(String::TT::tt($str));
 }
 
+# This function call is essential. It exports all functions defined with
+# 'register', so your main Dancer-app can use them.
 register_plugin;
 
+# A perl module always ends with true!
 1;
 
 =encoding UTF-8
+
+=head1 THIS IS AN EXAMPLE ONLY
+
+You probably don't need this module. Consult the README for reasons.
+It now serves mainly as an example for first-time Dancer-plugin authors.
 
 =head1 NAME
 
